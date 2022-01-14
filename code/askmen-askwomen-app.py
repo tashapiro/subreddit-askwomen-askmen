@@ -18,7 +18,7 @@ input_var = st.text_input(label="Enter your question here:")
 df_stop = pd.read_csv("../data/text_df.csv")
 df_nostop = pd.read_csv("../text_df_nostops.csv")
 
-with open('../model/rfc_pipe.pkl',mode='rb') as pickle_in:
+with open('../rfc_pipe.pkl',mode='rb') as pickle_in:
     pipe = pickle.load(pickle_in)
 
 pred = pipe.predict([input_var])[0]
