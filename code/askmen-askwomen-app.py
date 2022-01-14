@@ -14,10 +14,10 @@ st.write('Predict whether your question sounds more like a question from the **A
 
 input_var = st.text_input(label="Enter your question here:")
 
-df_stop = pd.read_csv("../data/text_df.csv")
-df_nostop = pd.read_csv("../text_df_nostops.csv")
+df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df.csv")
+df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
-with open('../rfc_pipe.pkl',mode='rb') as pickle_in:
+with open('https://github.com/tashapiro/subreddit-askwomen-askmen/raw/main/rfc_pipe.pkl',mode='rb') as pickle_in:
     pipe = pickle.load(pickle_in)
 
 pred = pipe.predict([input_var])[0]
