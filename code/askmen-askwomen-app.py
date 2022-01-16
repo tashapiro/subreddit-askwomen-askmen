@@ -7,11 +7,7 @@ import pickle
 import plotly.figure_factory as ff
 import plotly.express as px
 
-from pathlib import Path
 
-p = Path('.')
-p = p.resolve()
-model_path = str(p) + "/code/rfc_pipe.pkl"
 
 st.title('AskMen or AskWomen')
 
@@ -25,7 +21,7 @@ df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-ask
 df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
 
-with open(model_path,mode='rb') as pickle_in:
+with open('/app/subreddit-askwomen-askmen/code/rfc_pipe.pkl',mode='rb') as pickle_in:
     pipe = pickle.load(pickle_in)
 
 pred = pipe.predict([input_var])[0]
