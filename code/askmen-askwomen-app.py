@@ -1,10 +1,17 @@
+import os
+import sys
+import streamlit as st 
 import pandas as pd
-import pickle
-import streamlit as st
-from PIL import Image
+import pickle 
 
 import plotly.figure_factory as ff
 import plotly.express as px
+
+from pathlib import Path
+
+p = Path('.')
+p = p.resolve()
+model_path = str(p) + "/code/rfc_pipe.pkl"
 
 st.title('AskMen or AskWomen')
 
@@ -17,7 +24,8 @@ input_var = st.text_input(label="Enter your question here:")
 df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df.csv")
 df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
-with open('https://github.com/tashapiro/subreddit-askwomen-askmen/raw/main/rfc_pipe.pkl',mode='rb') as pickle_in:
+
+with open(model_path,mode='rb') as pickle_in:
     pipe = pickle.load(pickle_in)
 
 pred = pipe.predict([input_var])[0]
@@ -101,4 +109,5 @@ else:
         st.plotly_chart(fig2, use_container_width=True)
     else:
         st.write("No bigram matches, not enough data")
+
 
