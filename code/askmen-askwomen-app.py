@@ -1,15 +1,17 @@
-import os
-import sys
 import streamlit as st 
 import pandas as pd
 import pickle 
+import gdown
 
 import plotly.figure_factory as ff
 import plotly.express as px
 
 
+st.title('AskMen or AskWomen 🙋‍♀️  🙋‍♂️')
 
-st.title('AskMen or AskWomen')
+st.subheader("What is this?")
+
+st.write("This project uses NLP classification to assess whether a question sounds more like a question from the AskWomen or AskMen subreddit. The project collected 10,000 submissions from both subreddits to create a predictive model. Predictive model uses a Random Forest Classifier, model accuracy ~80%.")
 
 st.subheader("Let's Predict!")
 
@@ -20,21 +22,33 @@ input_var = st.text_input(label="Enter your question here:")
 df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df.csv")
 df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
+#solution from https://discuss.streamlit.io/t/git-pull-failed-while-deploying/17258
+model_url = 'https://drive.google.com/uc?id=1K0KJeApKCfS8oacVmkk_Fh4C2nZesKT8'
+output = 'rfc_pickle.pkl'
+pipe =  gdown.download(model_url, output, quiet=False) 
 
-with open('/app/subreddit-askwomen-askmen/code/rfc_pipe.pkl',mode='rb') as pickle_in:
-    pipe = pickle.load(pickle_in)
+with open(pipe,mode='rb') as pickle_in:
+    pipe_f = pickle.load(pickle_in)
 
-pred = pipe.predict([input_var])[0]
+pred = pipe_f.predict([input_var])[0]
+
+
 
 if input_var == '':
     st.write("")
+
 else:
-    st.write(f'You question sounds like it came from **{pred}**.')
-    image = Image.open(f'../images/{pred}.png')
-    st.image(image)
+    if pred == 'AskWomen':
+        emoji_var = '🙋‍♀️'
+    elif pred=='AskMen':
+        emoji_var = '🙋‍♂️'
+    
+    st.write(f'You question sounds like it came from **{pred}**. {emoji_var}')
 
     st.subheader("Text Analysis")
+    
     st.write("Below is a  text comparison using words and phrases from your question compared to other questions on AskMen and AskWomen. Select **Remove Fluff Words** to eliminate stop words (e.g. there, what, why). Note: the model factors in stop or 'fluff' words to form a prediction.")
+    
     remove_fluff = st.checkbox('Remove Fluff Words', value=True)
 
     if remove_fluff:
