@@ -22,6 +22,9 @@ input_var = st.text_input(label="Enter your question here:")
 df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df.csv")
 df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
+
+!gdown --'1K0KJeApKCfS8oacVmkk_Fh4C2nZesKT8'
+
 #solution from https://discuss.streamlit.io/t/git-pull-failed-while-deploying/17258
 model_url = 'https://drive.google.com/uc?id=1K0KJeApKCfS8oacVmkk_Fh4C2nZesKT8'
 output = 'rfc_pickle.pkl'
