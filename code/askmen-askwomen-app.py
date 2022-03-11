@@ -1,7 +1,10 @@
 import streamlit as st 
 import pandas as pd
 import pickle 
-import gdown
+from io import BytesIO
+from zipfile import ZipFile
+from urllib.request import urlopen
+import _pickle as cPickle
 
 import plotly.figure_factory as ff
 import plotly.express as px
@@ -22,18 +25,14 @@ input_var = st.text_input(label="Enter your question here:")
 df_stop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df.csv")
 df_nostop = pd.read_csv("https://raw.githubusercontent.com/tashapiro/subreddit-askwomen-askmen/main/data/text_df_nostops.csv")
 
-
-#solution from https://discuss.streamlit.io/t/git-pull-failed-while-deploying/17258
-model_url = 'https://drive.google.com/uc?id=1K0KJeApKCfS8oacVmkk_Fh4C2nZesKT8'
-output = 'rfc_pickle.pkl'
-pipe =  gdown.download(model_url, output, quiet=False) 
-
-with open(pipe,mode='rb') as pickle_in:
-    pipe_f = pickle.load(pickle_in)
-
-pred = pipe_f.predict([input_var])[0]
+#load pickle file from zip
+model_url = "https://github.com/tashapiro/subreddit-askwomen-askmen/blob/main/model/subreddit-model.zip?raw=true"
+resp = urlopen(model_url)
+archive = ZipFile(BytesIO(resp.read()),'r')
+pipe = cPickle.load(archive.open('subreddit-model.pkl'))
 
 
+pred = pipe.predict([input_var])[0]
 
 if input_var == '':
     st.write("")
